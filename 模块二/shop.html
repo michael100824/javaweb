@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <table border="1px" width="50%" height="450px" align="center" cellspacing="0">
+        <tr>
+            <th></th>
+            <th>书籍名称</th>
+            <th>出版日期</th>
+            <th>价格</th>
+            <th>购买数量</th>
+            <th>操作</th>
+        </tr>
+        <tr v-for="(item ,index) in items" align="center">
+            <td>{{index+1}}</td>
+            <td @click="clickObject(index)">{{item.name}}</td>
+            <td>{{item.date}}</td>
+            <td>￥{{item.price}}</td>
+            <td>
+                <input :disabled="item.num === 1" type="button" value="-"  @click="subNum(index)"/>
+                {{item.num}}
+                <input type="button" value="+" @click="addNum(index)"/>
+            </td>
+            <td><a href="#"  @click.prevent="deleteItem(index)">移除</a></td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                <h2>总价格：￥{{totalPrice}}</h2>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+
+<script>
+    new Vue({
+        el:"#app",
+        data : {
+            items :[
+                {
+                    name:"《java编程思想》",
+                    date:"2020/9",
+                    price:98.00,
+                    num:1
+                },
+                {
+                    name:"《数据分析与数据原理》",
+                    date:"2019/2",
+                    price:39.00,
+                    num:1
+                },
+                {
+                    name:"《Hadoop权威指南》",
+                    date:"2019/10",
+                    price:59.00,
+                    num:1
+                },
+                {
+                    name:"《代码大全》",
+                    date:"2018/8",
+                    price:128.00,
+                    num:1
+                }
+            ],
+            totalPrice:324
+        },
+        methods :{
+            price(){
+                console.log("totaPrice");
+                this.totalPrice=0;
+                for(var i = 0;i<this.items.length;i++)
+                {
+                    this.totalPrice += this.items[i].num*this.items[i].price;
+                }
+                console.log("totaPrice = "+this.totalPrice);
+            },
+            deleteItem(index){
+
+                if(confirm("您是否确认移除？")){
+                    this.items.splice(index,1);
+                }
+                this.price();
+            },
+            addNum(index){
+
+                this.items[index].num+=1;
+                this.price();
+            },
+            subNum(index){
+
+                this.items[index].num -= 1;
+                this.price();
+            }
+        }
+    })
+</script>
+</html>
